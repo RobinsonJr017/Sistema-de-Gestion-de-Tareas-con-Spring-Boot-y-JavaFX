@@ -16,9 +16,9 @@ import lombok.ToString;
 @ToString
 public class Tarea {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Se usa para manejar en mysql el tipo de dato autoincrementable
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTarea;
     private String nombreTarea;
-    private String responsable;
+    private String reponsable;
     private String estatus;
 }
