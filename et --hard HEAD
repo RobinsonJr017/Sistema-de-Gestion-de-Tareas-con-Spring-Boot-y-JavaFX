@@ -1,0 +1,35 @@
+[33mcommit 21576b8e96590dc67d4d8fe0306180ecb15c9ff4[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Robinson Lopez <robins.616009@gmail.com>
+Date:   Mon Feb 17 17:36:28 2025 -0500
+
+    Tabla JavaFX
+
+[33mcommit ff15272272cf4227e3cb1f2e7787bd7dcc4c6318[m
+Author: Robinson Lopez <robins.616009@gmail.com>
+Date:   Mon Feb 17 15:32:49 2025 -0500
+
+    Integracion de JavaFx con Spring
+
+[33mcommit 262deccdac7b98fb3556212725447aef08302ad9[m
+Author: Robinson Lopez <robins.616009@gmail.com>
+Date:   Mon Feb 17 15:11:15 2025 -0500
+
+    Config inicial JavaFx
+
+[33mcommit 6607751feada8afd2e16a54098ab7fb9672d24d0[m
+Author: Robinson Lopez <robins.616009@gmail.com>
+Date:   Mon Feb 17 15:10:32 2025 -0500
+
+    Config inicial JavaFx
+
+[33mcommit e3d999be30b449b305bdace383d58dd18ea39ef9[m
+Author: Robinson Lopez <robins.616009@gmail.com>
+Date:   Mon Feb 17 14:46:00 2025 -0500
+
+    capa de servicio y de datos (spring)
+
+[33mcommit 96563371d1f32b0735bef00cf5582e0f743ecd32[m
+Author: Robinson Lopez <robins.616009@gmail.com>
+Date:   Sat Feb 15 17:31:21 2025 -0500
+
+    Inicializacion proyecto
