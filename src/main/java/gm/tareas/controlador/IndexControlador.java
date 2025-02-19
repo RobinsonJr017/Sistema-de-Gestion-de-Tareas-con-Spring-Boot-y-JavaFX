@@ -40,19 +40,73 @@ public class IndexControlador implements Initializable {
     @FXML
     private TableColumn<Tarea, String> estatusColumna;
 
-    private final ObservableList<Tarea> tareaLista =
+    private final ObservableList<Tarea> tareaList =
             FXCollections.observableArrayList(); //Una lista de tipo observable para que cualquier cambio que tengamos en esta lista se vea en nuestra lista
-                //Para poder visualizarlo usamos |
+    //Para poder visualizarlo usamos |
+    @FXML
+    private TextField nombreTareaTexto;
+
+    @FXML
+    private TextField responsableTexto;
+
+    @FXML
+    private TextField estatusTexto;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tareaTabla.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); //Para que solo se pueda seleecionar un elemento de nuestra tabla
         configurarColumnas(); //metodo
+        listarTareas();
     }
 
-    private void configurarColumnas(){ //Es para poder relacionar la inf que vamos a cargar  en cada uno de los registros de nuestra tabla
+    private void configurarColumnas() {     //Es para poder relacionar la inf que vamos a cargar  en cada uno de los registros de nuestra tabla
         idTareaColumna.setCellValueFactory(new PropertyValueFactory<>("idTarea"));
         nombreTareaColumna.setCellValueFactory(new PropertyValueFactory<>("nombreTarea"));
         responsableColumna.setCellValueFactory(new PropertyValueFactory<>("responsable"));
         estatusColumna.setCellValueFactory(new PropertyValueFactory<>("estatus"));
+    }
+
+    private void listarTareas(){
+        logger.info("Ejecutando lista de tareas");
+        tareaList.clear(); //Limpiamos nuestra lista de tareas (Llamamos el metodo clear)
+        tareaList.addAll(tareaServicio.listarTareas()); //tareaServicio se comunica con nuestro repo y obitiene la info regresandola
+        //como obejetos de tipo tarea
+        tareaTabla.setItems(tareaList);
+    }
+
+    private void agregarTarea(){ //Publico para que lo podamos acceder
+        if(nombreTareaTexto.getText().isEmpty()){
+            mostrarMensaje("Error Validacion", "Debe proporcionar una tarea");
+            nombreTareaTexto.requestFocus();
+            return;
+        }
+        else {
+            var tarea = new Tarea();
+            recoletarDatosFormulario(tarea);
+            tareaServicio.guardarTarea(tarea);
+            mostrarMensaje("Informacion", "Tarea agregada");
+            limpiarFormulario();
+            listarTareas();
+        }
+    }
+
+    private void recoletarDatosFormulario(Tarea tarea){
+        tarea.setNombreTarea(nombreTareaTexto.getText());
+        tarea.setResponsable(responsableTexto.getText());
+        tarea.setEstatus(estatusTexto.getText());
+    }
+
+    private void limpiarFormulario(){
+        nombreTareaTexto.clear();
+        responsableTexto.clear();
+        estatusTexto.clear();
+    }
+
+    private void mostrarMensaje(String titulo, String mensaje){
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }
