@@ -47,8 +47,8 @@
          <children>
             <Button fx:id="agregarBoton" layoutX="44.0" layoutY="38.0" mnemonicParsing="false" onAction="#agregarTarea" style="-fx-background-color: #1d3557;" text="Agregar" textFill="#f1faee" />
             <Button fx:id="modificarBoton" layoutX="209.0" layoutY="38.0" mnemonicParsing="false" onAction="#modificarTarea" style="-fx-background-color: #1d3557;" text="Modificar" textFill="#f1faee" />
-            <Button fx:id="eliminarBoton" layoutX="381.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: #e63946;" text="Eliminar" textFill="#f1faee" />
-            <Button fx:id="limpiarBoton" layoutX="511.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: #ffd60a;" text="Limpiar Formulario" />
+            <Button fx:id="eliminarBoton" layoutX="381.0" layoutY="38.0" mnemonicParsing="false" onAction="#eliminarTarea" style="-fx-background-color: #e63946;" text="Eliminar" textFill="#f1faee" />
+            <Button fx:id="limpiarBoton" layoutX="511.0" layoutY="38.0" mnemonicParsing="false" onAction="#limpiarFormulario" style="-fx-background-color: #ffd60a;" text="Limpiar Formulario" />
          </children>
       </AnchorPane>
    </children>
