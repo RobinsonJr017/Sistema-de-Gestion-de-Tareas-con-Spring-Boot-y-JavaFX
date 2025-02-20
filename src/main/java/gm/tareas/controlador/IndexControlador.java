@@ -6,30 +6,28 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import javafx.scene.control.*;
-
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.*;
 
 @Component
 public class IndexControlador implements Initializable {
-
-    private static final Logger logger = LoggerFactory.getLogger(IndexControlador.class); //Atributo
+    private static final Logger logger =
+            LoggerFactory.getLogger(IndexControlador.class);
 
     @Autowired
     private TareaServicio tareaServicio;
 
-    @FXML //Es un atributo privado, entonces inidicamos que e sun componente de nuestra vista para eso usamos FXML
+    @FXML
     private TableView<Tarea> tareaTabla;
 
-    @FXML //Vamos a mapear las columnas
-    private  TableColumn<Tarea, Integer> idTareaColumna;
+    @FXML
+    private TableColumn<Tarea, Integer> idTareaColumna;
 
     @FXML
     private TableColumn<Tarea, String> nombreTareaColumna;
@@ -41,8 +39,8 @@ public class IndexControlador implements Initializable {
     private TableColumn<Tarea, String> estatusColumna;
 
     private final ObservableList<Tarea> tareaList =
-            FXCollections.observableArrayList(); //Una lista de tipo observable para que cualquier cambio que tengamos en esta lista se vea en nuestra lista
-    //Para poder visualizarlo usamos |
+            FXCollections.observableArrayList();
+
     @FXML
     private TextField nombreTareaTexto;
 
@@ -52,14 +50,16 @@ public class IndexControlador implements Initializable {
     @FXML
     private TextField estatusTexto;
 
+    private Integer idTareaInterno;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        tareaTabla.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); //Para que solo se pueda seleecionar un elemento de nuestra tabla
-        configurarColumnas(); //metodo
+        tareaTabla.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        configurarColumnas();
         listarTareas();
     }
 
-    private void configurarColumnas() {     //Es para poder relacionar la inf que vamos a cargar  en cada uno de los registros de nuestra tabla
+    private void configurarColumnas(){
         idTareaColumna.setCellValueFactory(new PropertyValueFactory<>("idTarea"));
         nombreTareaColumna.setCellValueFactory(new PropertyValueFactory<>("nombreTarea"));
         responsableColumna.setCellValueFactory(new PropertyValueFactory<>("responsable"));
@@ -67,22 +67,22 @@ public class IndexControlador implements Initializable {
     }
 
     private void listarTareas(){
-        logger.info("Ejecutando lista de tareas");
-        tareaList.clear(); //Limpiamos nuestra lista de tareas (Llamamos el metodo clear)
-        tareaList.addAll(tareaServicio.listarTareas()); //tareaServicio se comunica con nuestro repo y obitiene la info regresandola
-        //como obejetos de tipo tarea
+        logger.info("Ejecutando listado de tareas");
+        tareaList.clear();
+        tareaList.addAll(tareaServicio.listarTareas());
         tareaTabla.setItems(tareaList);
     }
 
-    private void agregarTarea(){ //Publico para que lo podamos acceder
+    public void agregarTarea(){
         if(nombreTareaTexto.getText().isEmpty()){
             mostrarMensaje("Error Validacion", "Debe proporcionar una tarea");
             nombreTareaTexto.requestFocus();
             return;
         }
-        else {
+        else{
             var tarea = new Tarea();
-            recoletarDatosFormulario(tarea);
+            recolectarDatosFormulario(tarea);
+            tarea.setIdTarea(null);
             tareaServicio.guardarTarea(tarea);
             mostrarMensaje("Informacion", "Tarea agregada");
             limpiarFormulario();
@@ -90,13 +90,44 @@ public class IndexControlador implements Initializable {
         }
     }
 
-    private void recoletarDatosFormulario(Tarea tarea){
+    public void cargarTareaFormulario(){ //Es un metodo publico de tipo void, para que se puede asociar a nuestra vista
+        var tarea = tareaTabla.getSelectionModel().getSelectedItems(); //cargar a nuestro componente
+        if (tarea != null){ //tarea.getIdTarea();
+            idTareaInterno = tarea.getFirst().getIdTarea(); //atributo
+            //nombreTareaTexto.setText(tarea.getNombreTarea());
+            nombreTareaTexto.setText(tarea.getFirst().getNombreTarea()); //(tarea.getNombreTarea());
+            responsableTexto.setText(tarea.getFirst().getResponsable());
+            estatusTexto.setText(tarea.getFirst().getEstatus());
+        }
+    }
+
+    private void recolectarDatosFormulario(Tarea tarea){
+        if (idTareaInterno != null)
+            tarea.setIdTarea(idTareaInterno);
         tarea.setNombreTarea(nombreTareaTexto.getText());
         tarea.setResponsable(responsableTexto.getText());
         tarea.setEstatus(estatusTexto.getText());
     }
 
+    public void modificarTarea(){
+        if (idTareaInterno == null){
+            mostrarMensaje("Informacion", "Debe seleccionar una tarea");
+            return;
+        }
+        if (nombreTareaTexto.getText().isEmpty()){
+            mostrarMensaje("Erro Validacion", "Debe proporcionar una tarea");
+            nombreTareaTexto.requestFocus();
+            return;
+        }
+        var tarea = new Tarea();
+        recolectarDatosFormulario(tarea);
+        tareaServicio.guardarTarea(tarea);
+        mostrarMensaje("Informacion", "Tarea modificada");
+        limpiarFormulario();
+    }
+
     private void limpiarFormulario(){
+        idTareaInterno = null;
         nombreTareaTexto.clear();
         responsableTexto.clear();
         estatusTexto.clear();
